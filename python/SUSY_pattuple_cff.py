@@ -242,10 +242,13 @@ def loadPF2PAT(process,mcInfo,jetMetCorrections,extMatch,doSusyTopProjection,pos
     process.isoValElectronWithChargedPF.deposits[0].deltaR = 0.3
     process.isoValElectronWithNeutralPF.deposits[0].deltaR = 0.3
     process.isoValElectronWithPhotonsPF.deposits[0].deltaR = 0.3
-    process.isoValMuonWithChargedPF.deposits[0].deltaR = 0.3
-    process.isoValMuonWithNeutralPF.deposits[0].deltaR = 0.3
-    process.isoValMuonWithPhotonsPF.deposits[0].deltaR = 0.3
-
+    #process.isoValMuonWithChargedPF.deposits[0].deltaR = 0.3
+    #process.isoValMuonWithNeutralPF.deposits[0].deltaR = 0.3
+    #process.isoValMuonWithPhotonsPF.deposits[0].deltaR = 0.3
+    process.pfIsolatedMuonsPF.isolationValueMapsCharged = cms.VInputTag(cms.InputTag("muPFIsoValueCharged03PF"))
+    process.pfIsolatedMuonsPF.deltaBetaIsolationValueMap = cms.InputTag("muPFIsoValuePU03PF")
+    process.pfIsolatedMuonsPF.isolationValueMapsNeutral = cms.VInputTag(cms.InputTag("muPFIsoValueNeutral03PF"), cms.InputTag("muPFIsoValueGamma03PF"))
+    
     #-- Enable pileup sequence -------------------------------------------------------------
     #Vertices
     process.goodVertices = cms.EDFilter("VertexSelector",
@@ -268,9 +271,9 @@ def loadPF2PAT(process,mcInfo,jetMetCorrections,extMatch,doSusyTopProjection,pos
     process.pfElectronsFromVertexPF.dzCut = 9999.0
     process.pfElectronsFromVertexPF.d0Cut = 9999.0
     process.pfSelectedElectronsPF.cut = ""
-    process.pfRelaxedElectronsPF = process.pfIsolatedElectronsPF.clone(combinedIsolationCut = 3.)
+    process.pfRelaxedElectronsPF = process.pfIsolatedElectronsPF.clone(isolationCut = 3.0)
+    process.pfIsolatedElectronsPF.isolationCut = 0.15
     
-    process.pfIsolatedElectronsPF.combinedIsolationCut = 0.15
     process.pfElectronsFromGoodVertex = cms.EDFilter(
         "IPCutPFCandidateSelector",
         src = cms.InputTag("pfIsolatedElectronsPF"),  # PFCandidate source
@@ -301,9 +304,9 @@ def loadPF2PAT(process,mcInfo,jetMetCorrections,extMatch,doSusyTopProjection,pos
     process.pfMuonsFromVertexPF.dzCut = 9999.0
     process.pfMuonsFromVertexPF.d0Cut = 9999.0
     process.pfSelectedMuonsPF.cut = ""
-    process.pfRelaxedMuonsPF = process.pfIsolatedMuonsPF.clone(combinedIsolationCut = 3)
+    process.pfRelaxedMuonsPF = process.pfIsolatedMuonsPF.clone(isolationCut = 3.0)
     
-    process.pfIsolatedMuonsPF.combinedIsolationCut = 0.15
+    process.pfIsolatedMuonsPF.isolationCut = 0.15
     process.pfMuonsFromGoodVertex = cms.EDFilter(
         "IPCutPFCandidateSelector",
         src = cms.InputTag("pfIsolatedMuonsPF"),  # PFCandidate source
